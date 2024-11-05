@@ -7,7 +7,7 @@ import { APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017/maintenance-manager'),
+    MongooseModule.forRoot('mongodb://mongodb:27017/maintenance-manager'),
     UsersModule,
     AuthModule,
   ],
