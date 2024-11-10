@@ -11,10 +11,10 @@ export class CreateMaintenanceDto {
 
   @ApiProperty({
     description: 'ID da máquina associada à manutenção',
-    example: '60e5f7a7b579f404f8249f3d',  // Exemplo de um ObjectId
+    example: '60e5f7a7b579f404f8249f3d', 
   })
   @IsString()
-  machine: string; // Pode ser um ObjectId de referência
+  machine: string; 
 
   @ApiProperty({
     description: 'Data de abertura da manutenção',
