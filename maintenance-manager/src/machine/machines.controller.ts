@@ -3,7 +3,9 @@ import { MachineService } from '../machine/shared/machine.service';
 import { CreateMachineDto } from './shared/dto/create-machine';
 import { UpdateMachineDto } from './shared/dto/update-machine';
 import { Machine } from '../machine/shared/machine';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Machines') 
 @Controller('machines')
 export class MachineController {
   constructor(private readonly machineService: MachineService) {}
@@ -20,7 +22,7 @@ export class MachineController {
 
   @Get(':id')
   findOne(@Param('id') id: string): Promise<Machine> {
-    return this.machineService.findOne(id);
+    return this.machineService.findById(id);
   }
 
   @Put(':id')

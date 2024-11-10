@@ -2,28 +2,14 @@ version: '3.8'
 
 services:
   mongodb:
-    image: mongo:latest
+    image: mongo:latest  # Usando a última versão oficial do MongoDB
     container_name: mongodb
     ports:
-      - "27017:27017"  # A porta que será exposta no host
+      - "27017:27017"  # Expõe a porta padrão do MongoDB para o host
     volumes:
-      - mongo_data:/data/db  # Persistência de dados entre reinicializações
+      - mongo_data:/data/db  # Persistência de dados
     networks:
       - app-network
-
-  nestjs-app:
-    build:
-      context: .
-    container_name: nestjs-app
-    depends_on:
-      - mongodb  # Garante que o MongoDB seja iniciado antes
-    ports:
-      - "3000:3000"  # Porta onde sua aplicação será exposta
-    environment:
-      - MONGO_URI=mongodb://mongodb:27017/maintenance-manager  # URL de conexão com o MongoDB
-    networks:
-      - app-network
-    command: ["npm", "run", "start:prod"]
 
 networks:
   app-network:

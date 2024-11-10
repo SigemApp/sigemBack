@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsDate } from 'class-validator';
+import { IsOptional, IsString, IsDateString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateMachineDto {
@@ -14,13 +14,8 @@ export class UpdateMachineDto {
 
   @ApiProperty({ description: 'Modelo da máquina', example: 'Model 3000', required: false })
   @IsOptional()
-  @IsString({ message: 'O campo "model" deve ser uma string' })
+  @IsString({ message: 'O campo "machineModel" deve ser uma string' })
   machineModel?: string;
-
-  @ApiProperty({ description: 'Data de fabricação da máquina', example: '2022-06-01T00:00:00Z', required: false })
-  @IsOptional()
-  @IsDate({ message: 'O campo "manufacturingDate" deve ser uma data válida' })
-  manufacturingDate?: Date;
 
   @ApiProperty({ description: 'Número de série da máquina', example: 'SN123456789', required: false })
   @IsOptional()
@@ -36,4 +31,13 @@ export class UpdateMachineDto {
   @IsOptional()
   @IsString({ message: 'O campo "image" deve ser uma string' })
   image?: string;
+
+  @ApiProperty({ description: 'Histórico de manutenções da máquina', required: false })
+  @IsOptional()
+  maintenanceHistory?: string[];
+
+  @ApiProperty({ description: 'Data de fabricação da máquina', example: '2022-08-15', required: false })
+  @IsOptional()
+  @IsDateString({}, { message: 'O campo "manufacturingDate" deve ser uma data válida no formato ISO 8601' })
+  manufacturingDate?: string;
 }

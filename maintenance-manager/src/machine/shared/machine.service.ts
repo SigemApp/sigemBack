@@ -7,47 +7,52 @@ import { Machine } from '../shared/machine';
 
 @Injectable()
 export class MachineService {
-  constructor(@InjectModel('Machine') private readonly machineModel: Model<Machine>) {}
+  constructor(
+    @InjectModel(Machine.name) private readonly machineModel: Model<Machine>
+  ) {}
+
+  async create(createMachineDto: CreateMachineDto): Promise<Machine> {
+    const createdMachine = new this.machineModel(createMachineDto);
+    return createdMachine.save();
+  }
+
+  async update(id: string, updateMachineDto: UpdateMachineDto): Promise<Machine> {
+    const machine = await this.machineModel.findById(id);
+
+    if (!machine) {
+      throw new Error('Máquina não encontrada');
+    }
+
+    if (updateMachineDto.maintenanceHistory) {
+     
+      await this.machineModel.updateOne(
+        { _id: id },
+        { $push: { maintenanceHistory: { $each: updateMachineDto.maintenanceHistory } } }
+      );
+    } else {
+      
+      await this.machineModel.updateOne({ _id: id }, updateMachineDto);
+    }
+
+    return this.machineModel.findById(id); 
+  }
+
+  async findById(id: string): Promise<Machine> {
+    const machine = await this.machineModel.findById(id);
+    if (!machine) {
+      throw new Error('Máquina não encontrada');
+    }
+    return machine;
+  }
 
   async findAll(): Promise<Machine[]> {
     return this.machineModel.find().exec();
   }
 
-  async findOne(id: string): Promise<Machine | null> {
-    return this.machineModel.findById(id).exec();
-  }
-
-  async findOneBySerialNumber(serialNumber: string): Promise<Machine> {
-    const machine = await this.machineModel.findOne({ serialNumber }).exec();
-
-    if (!machine) {
-      throw new NotFoundException('Máquina não encontrada');
-    }
-    return machine;
-  }
-
-  async existingMachine(serialNumber: string): Promise<Machine | null> {
-    const machine = await this.machineModel.findOne({ serialNumber }).exec();
-    return machine;
-  }
-
-  async create(createMachineDto: CreateMachineDto): Promise<Machine> {
-    const newMachine = new this.machineModel(createMachineDto);
-    return newMachine.save();
-  }
-
-  async update(id: string, updateMachineDto: UpdateMachineDto): Promise<Machine | null> {
-    return this.machineModel.findByIdAndUpdate(id, updateMachineDto, {
-      new: true,
-      runValidators: true,
-    }).exec();
-  }
-
   async delete(id: string): Promise<void> {
-    const machine = await this.machineModel.findById(id).exec();
+    const machine = await this.machineModel.findByIdAndDelete(id);
     if (!machine) {
-      throw new NotFoundException('Máquina não encontrada');
+      throw new Error('Máquina não encontrada');
     }
-    await this.machineModel.deleteOne({ _id: id }).exec();
   }
 }

@@ -9,13 +9,16 @@ export const MachineSchema = new mongoose.Schema(
     serialNumber: { type: String, required: true, unique: true },
     location: { type: String, required: true },
     image: { type: String, required: false },
-
+    maintenances: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Maintenance',
+      required: false,
+    }],
     create_at: {
       type: Date,
       default: Date.now,
       select: false,
     },
-
     update_at: {
       type: Date,
       default: null,
@@ -29,8 +32,8 @@ export const MachineSchema = new mongoose.Schema(
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
-        delete ret.create_at;  
-        delete ret.update_at;  
+        delete ret.create_at;
+        delete ret.update_at;
       },
     },
   }

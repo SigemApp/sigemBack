@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsDate, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsDateString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateMachineDto {
@@ -13,14 +13,9 @@ export class CreateMachineDto {
   type: string;
 
   @ApiProperty({ description: 'Modelo da máquina', example: 'Model 3000' })
-  @IsNotEmpty({ message: 'O campo "model" não pode estar vazio' })
-  @IsString({ message: 'O campo "model" deve ser uma string' })
+  @IsNotEmpty({ message: 'O campo "machineModel" não pode estar vazio' })
+  @IsString({ message: 'O campo "machineModel" deve ser uma string' })
   machineModel: string;
-
-  @ApiProperty({ description: 'Data de fabricação da máquina', example: '2022-06-01T00:00:00Z' })
-  @IsNotEmpty({ message: 'O campo "manufacturingDate" não pode estar vazio' })
-  @IsDate({ message: 'O campo "manufacturingDate" deve ser uma data válida' })
-  manufacturingDate: Date;
 
   @ApiProperty({ description: 'Número de série da máquina', example: 'SN123456789' })
   @IsNotEmpty({ message: 'O campo "serialNumber" não pode estar vazio' })
@@ -32,8 +27,16 @@ export class CreateMachineDto {
   @IsString({ message: 'O campo "location" deve ser uma string' })
   location: string;
 
+  @ApiProperty({ description: 'Data de fabricação da máquina', example: '2022-08-15' })
+  @IsNotEmpty({ message: 'O campo "manufacturingDate" não pode estar vazio' })
+  @IsDateString({}, { message: 'O campo "manufacturingDate" deve ser uma data válida no formato ISO 8601' }) 
+  manufacturingDate: string;
+
   @ApiProperty({ description: 'Imagem da máquina (opcional)', example: 'https://example.com/image.jpg', required: false })
   @IsOptional()
   @IsString({ message: 'O campo "image" deve ser uma string' })
   image?: string;
+
+  @ApiProperty({ description: 'Histórico de manutenções da máquina', default: [] })
+  maintenanceHistory: string[];
 }
