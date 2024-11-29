@@ -8,6 +8,8 @@ import { MachineModule } from './machine/machines.module';
 import { MaintenanceModule } from './maintenance/maintenance.module';
 import { ServiceModule } from './services/service.module';
 import { SupplierModule } from './supplier/supplier.module';
+import { StockModule } from './stock-control/stock/stock.module';
+import { TeamManagementModule } from './team-management/team-management.module';
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost:27017/maintenance-manager'), 
@@ -17,7 +19,9 @@ import { SupplierModule } from './supplier/supplier.module';
     MachineModule, 
     MaintenanceModule,
     ServiceModule,
-    SupplierModule
+    SupplierModule,
+    StockModule,
+    TeamManagementModule
   ],
   controllers: [UserController],
   providers: [
