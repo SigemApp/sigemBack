@@ -11,7 +11,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 @Controller('maintenance')
 export class MaintenanceController {
   constructor(private readonly maintenanceService: MaintenanceService) {}
-
+  
   @Post()
   @UseGuards(AuthGuard)
   async create(@Body() createMaintenanceDto: CreateMaintenanceDto): Promise<Maintenance> {
