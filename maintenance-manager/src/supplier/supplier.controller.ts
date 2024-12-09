@@ -3,9 +3,11 @@ import { SupplierService } from './shared/supplier.service';
 import { CreateSupplierDto } from './shared/dto/create-supplier';
 import { UpdateSupplierDto } from './shared/dto/update-supplier';
 import { Supplier } from './shared/supplier';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @ApiTags('Suppliers')
+@ApiBearerAuth()
 @Controller('suppliers')
 export class SupplierController {
   constructor(private readonly supplierService: SupplierService) {}
@@ -15,6 +17,7 @@ export class SupplierController {
   @ApiResponse({ status: 201, description: 'Fornecedor criado com sucesso' })
   @ApiResponse({ status: 400, description: 'Erro ao criar o fornecedor' })
   @ApiBody({ description: 'Dados para criação do fornecedor', type: CreateSupplierDto })
+  @UseGuards(AuthGuard)
   async create(@Body() createSupplierDto: CreateSupplierDto): Promise<Supplier> {
     return this.supplierService.create(createSupplierDto);
   }
@@ -22,6 +25,7 @@ export class SupplierController {
   @Get()
   @ApiOperation({ summary: 'Obter todos os fornecedores' })
   @ApiResponse({ status: 200, description: 'Lista de fornecedores retornada com sucesso' })
+  @UseGuards(AuthGuard)
   async findAll(): Promise<Supplier[]> {
     return this.supplierService.findAll();
   }
@@ -30,6 +34,7 @@ export class SupplierController {
   @ApiOperation({ summary: 'Obter um fornecedor pelo código' })
   @ApiResponse({ status: 200, description: 'Fornecedor encontrado com sucesso' })
   @ApiResponse({ status: 404, description: 'Fornecedor não encontrado' })
+  @UseGuards(AuthGuard)
   async findOne(@Param('code') code: string): Promise<Supplier> {
     return this.supplierService.findByCode(code);
   }
@@ -39,6 +44,7 @@ export class SupplierController {
   @ApiResponse({ status: 200, description: 'Fornecedor atualizado com sucesso' })
   @ApiResponse({ status: 400, description: 'Erro ao atualizar o fornecedor' })
   @ApiResponse({ status: 404, description: 'Fornecedor não encontrado' })
+  @UseGuards(AuthGuard)
   async update(@Param('code') code: string, @Body() updateSupplierDto: UpdateSupplierDto): Promise<Supplier> {
     return this.supplierService.update(code, updateSupplierDto);
   }
@@ -47,6 +53,7 @@ export class SupplierController {
   @ApiOperation({ summary: 'Deletar um fornecedor' })
   @ApiResponse({ status: 200, description: 'Fornecedor deletado com sucesso' })
   @ApiResponse({ status: 404, description: 'Fornecedor não encontrado' })
+  @UseGuards(AuthGuard)
   async remove(@Param('code') code: string): Promise<void> {
     return this.supplierService.delete(code);
   }

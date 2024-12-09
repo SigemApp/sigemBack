@@ -4,7 +4,6 @@ import { SupplierController } from './supplier.controller';
 import { SupplierService } from './shared/supplier.service';
 import { Supplier } from './shared/supplier';
 import { SupplierSchema } from './schemas/supplier.schema';
-import { SupplierGuard } from './supplier.guard';  
 
 @Module({
   imports: [
@@ -13,6 +12,6 @@ import { SupplierGuard } from './supplier.guard';
     ]),
   ],
   controllers: [SupplierController],
-  providers: [SupplierService, SupplierGuard], 
+  providers: [SupplierService], 
 })
 export class SupplierModule {}
