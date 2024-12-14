@@ -3,8 +3,8 @@ import { UsersService } from './shared/users.service';
 import { CreateUserDto } from './shared/dto/create-user.dto';
 import { UpdateUserDto } from './shared/dto/update-user.dto';
 import { User } from './shared/user';
-import { UserGuard } from './user.guard';
 import { ApiTags, ApiOperation, ApiResponse, ApiBadRequestResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -15,7 +15,7 @@ export class UserController {
   @Get()
   @ApiOperation({ summary: 'Buscar todos os usuários' })
   @ApiResponse({ status: 200, type: User, isArray: true, description: 'Lista de usuários' })
-  @UseGuards(UserGuard)
+  @UseGuards(AuthGuard)
   async findAll(): Promise<{ users: User[] }> {
     try {
       const users = await this.userService.findAll();
@@ -29,7 +29,7 @@ export class UserController {
   @Get(':id')
   @ApiOperation({ summary: 'Buscar um usuário pelo ID' })
   @ApiResponse({ status: 200, type: User, description: 'Usuário encontrado' })
-  @UseGuards(UserGuard)
+  @UseGuards(AuthGuard)
   async findOne(@Param('id') id: string): Promise<{ user: User }> {
     try {
       const user = await this.userService.findOne(id);
@@ -60,7 +60,7 @@ export class UserController {
   @Put(':id')
   @ApiOperation({ summary: 'Atualizar um usuário pelo ID' })
   @ApiResponse({ status: 200, type: User, description: 'Usuário atualizado' })
-  @UseGuards(UserGuard)
+  @UseGuards(AuthGuard)
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<{ user: User }> {
     try {
       const updatedUser = await this.userService.update(id, updateUserDto);
@@ -74,7 +74,7 @@ export class UserController {
   @Delete(':id')
   @ApiOperation({ summary: 'Excluir um usuário pelo ID' })
   @ApiResponse({ status: 200, description: 'Usuário removido com sucesso' })
-  @UseGuards(UserGuard)
+  @UseGuards(AuthGuard)
   async delete(@Param('id') id: string): Promise<void> {
     try {
       await this.userService.delete(id);
